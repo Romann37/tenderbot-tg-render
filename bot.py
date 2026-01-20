@@ -219,6 +219,18 @@ def handle_documents(message):
         "🤖 Claude 3.5 анализирует...\n⏳ 10-30 сек", 
         reply_markup=action_menu())
 
+from flask import Flask
+from threading import Thread
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "TenderAnalyzerBot работает 24/7!"
+
+def run_flask():
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+
 if __name__ == '__main__':
     print("🚀 TenderAnalyzerBot запущен!")
     print("✅ Токен: OK | Парсинг: OK | ИИ: OK | Документы: OK")
