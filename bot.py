@@ -219,20 +219,31 @@ def handle_documents(message):
         "🤖 Claude 3.5 анализирует...\n⏳ 10-30 сек", 
         reply_markup=action_menu())
 
+# ДОБАВИТЬ В КОНЕЦ bot.py (перед if __name__ == '__main__':)
 from flask import Flask
+import os
 from threading import Thread
 
-app = Flask('')
+app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return "TenderAnalyzerBot работает 24/7!"
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return "🚀 TenderAnalyzerBot работает! t.me/ii_agent37_Bot"
 
 def run_flask():
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port, debug=False)
 
+# ИЗМЕНИТЬ if __name__ == '__main__':
 if __name__ == '__main__':
-    print("🚀 TenderAnalyzerBot запущен!")
-    print("✅ Токен: OK | Парсинг: OK | ИИ: OK | Документы: OK")
-    print("🎯 Тестируйте: t.me/ii_agent37_Bot → /start")
+    print("🚀 Flask + Telegram Bot запускаются...")
+    # Flask в фоне
+    flask_thread = Thread(target=run_flask, daemon=True)
+    flask_thread.start()
+    print("✅ Flask на порту $PORT")
+    
+    # Telegram bot
+    print("✅ Telegram Bot polling...")
+    print("🎯 t.me/ii_agent37_Bot → /start")
     bot.infinity_polling(none_stop=True)
