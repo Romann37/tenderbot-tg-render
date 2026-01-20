@@ -224,43 +224,7 @@ def handle_unknown(message):
 
 
 if __name__ == '__main__':
-    import os
-    from threading import Thread
-    
     print("🚀 TenderAnalyzerBot запущен!")
     print("✅ Токен: OK | Парсинг: OK | ИИ: OK | Документы: OK")
     print("🎯 Тестируйте: t.me/ii_agent37_Bot → /start")
-    
-    # Health check endpoint для Render
-    @bot.message_handler(commands=['health'])
-    def health_check(message):
-        bot.reply_to(message, "✅ Bot alive!")
-    
-    # Запуск polling в фоне + веб-сервер
-    def run_bot():
-        try:
-            bot.infinity_polling(none_stop=True, interval=1, timeout=30)
-        except Exception as e:
-            print(f"❌ Bot error: {e}")
-    
-    bot_thread = Thread(target=run_bot)
-    bot_thread.daemon = True
-    bot_thread.start()
-    
-    # Минимальный веб-сервер для Render Free (держит awake)
-    from flask import Flask
-    app = Flask(__name__)
-    
-    @app.route('/')
-    def home():
-        return "🤖 TenderAnalyzerBot работает! t.me/ii_agent37_Bot"
-    
-    @app.route('/health')
-    def health():
-        return {"status": "ok", "bot": "running"}
-    
-    # Render порт
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port)
-
-
+    bot.infinity_polling(none_stop=True)
